@@ -18,7 +18,6 @@ return new class extends Migration
             $table->date('expiry_date');
             $table->boolean('is_redeemed')->default(false);
             $table->boolean('is_downloaded')->default(false);
-            $table->text('download_link')->nullable();
             $table->timestamps();
         });
     }

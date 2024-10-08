@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Coupon;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
@@ -59,10 +60,6 @@ class CouponController extends Controller
             $fileName = $coupon->code . '.pdf';
             Storage::disk('public')->put('coupons/' . $fileName, $pdf->output());
 
-            // Generate the download link and store it in the database
-            $downloadLink = Storage::url('coupons/' . $fileName);
-            $coupon->update(['download_link' => $downloadLink]);
-
             // Add the coupon to the array for further use
             $coupons[] = $coupon;
         }
@@ -71,13 +68,40 @@ class CouponController extends Controller
         return view('coupon.generatedCouponPDF', ['coupons' => $coupons]);
     }
 
-    public function redeem(Coupon $coupon): \Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application
+    public function redeem($code): \Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application
     {
+        $coupon = Coupon::query()->where('code', $code)->first();
+        if (Carbon::parse($coupon->expiry_date)->isBefore(now())) {
+            return view('coupon.expiredCoupon', compact('coupon'));
+        }
         return view('coupon.redeemCoupon', compact('coupon'));
     }
 
     public function confirmRedeem(Request $request, Coupon $coupon): \Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application
     {
+        $passkey = env('PASSKEY');
+        $request->validate([
+            'passkey' => 'required|in:' . $passkey,
+        ]);
+        $coupon->update([
+            'is_redeemed' => 1,
+        ]);
+        return view('coupon.redeemSuccess', compact('coupon'));
+    }
+
+    public function download(Coupon $coupon)
+    {
+        // File path in 'public' disk (storage/app/public)
+        $filePath = 'coupons/' . $coupon->code . '.pdf';
+
+        // Check if the file exists in the 'public' disk
+        if (!Storage::disk('public')->exists($filePath)) {
+            return redirect()->back()->with('error', 'File not found.');
+        }
+        $coupon->is_downloaded = true;
+        $coupon->save();
+        // Return the file as a download response
+        return Storage::disk('public')->download($filePath);
 
     }
 

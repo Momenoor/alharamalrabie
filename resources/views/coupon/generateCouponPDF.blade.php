@@ -73,38 +73,38 @@
         }
 
         .discount {
-            font-size: 40px;
-            font-weight: bold;
-            color: #38b2ac;
+            font-size: 40px !important;
+            font-weight: bold !important;
+            color: #38b2ac !important;
         }
 
         .note {
-            font-size: 12px;
-            font-weight: bold;
-            color: #e53e3e;
+            font-size: 12px !important;
+            font-weight: bold !important;
+            color: red !important;
         }
 
         .expiry-date {
-            margin-top: 24px;
-            font-size: 14px;
-            color: #a0aec0;
+            margin-top: 24px !important;
+            font-size: 14px !important;
+            color: #a0aec0 !important;
         }
 
         .expiry-date span {
-            font-size: 16px;
-            font-weight: 600;
-            color: #4a5568;
+            font-size: 16px !important;
+            font-weight: 600 !important;
+            color: #4a5568 !important;
         }
 
         .footer {
-            background-color: #edf2f7;
-            text-align: center;
-            padding: 16px;
+            background-color: #edf2f7 !important;
+            text-align: center !important;
+            padding: 16px !important;
         }
 
         .footer p {
-            font-size: 12px;
-            color: #718096;
+            font-size: 12px !important;
+            color: #718096 !important;
         }
 
         .redeemed-overlay {
@@ -113,7 +113,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background-color: rgba(74, 85, 104, 0.75);
+            background-color: rgba(74, 85, 104, 0.75) !important;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -123,7 +123,7 @@
         .redeemed-overlay h2 {
             font-size: 36px;
             font-weight: bold;
-            color: #f56565;
+            color: #f56565 !important;
         }
     </style>
 </head>
@@ -162,7 +162,7 @@
                 </div>
 
                 <h1>
-                    <a href="{{route('coupons.redeem',$coupon->code)}}"> Redeem</a>
+                    <a href="{{route('coupons.redeem',$coupon->code)}}">--> Redeem </a>
                 </h1>
             </div>
 

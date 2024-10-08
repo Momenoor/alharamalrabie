@@ -12,6 +12,8 @@
 
     <!-- Check if there are any coupons -->
     @if (empty($coupons))
+        <img style="display: block; margin: 0 auto;" class="" src="{{ asset('logo.png') }}"
+             alt="Company Logo" width="100px">
         <p class="text-center text-gray-600">No coupons have been generated yet.</p>
     @else
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -19,7 +21,8 @@
                 <div class="bg-white rounded-lg shadow-md overflow-hidden">
                     <!-- Coupon Header -->
                     <div class="bg-teal-500 text-white text-center py-4">
-                        <img style="display: block; margin: 0 auto;" class="" src="{{ asset('logo.png') }}" alt="Company Logo" width="100px">
+                        <img style="display: block; margin: 0 auto;" class="" src="{{ asset('logo.png') }}"
+                             alt="Company Logo" width="100px">
                         <h2 class="text-2xl font-bold">Coupon Code: {{ $coupon->code }}</h2>
                     </div>
 
@@ -41,8 +44,13 @@
 
                     <!-- Download Link -->
                     <div class="bg-gray-50 py-4 text-center">
-                        <a href="{{ asset($coupon->download_link) }}" class="text-indigo-600 hover:underline font-bold"
-                           download>Download Coupon PDF</a>
+                        @if($coupon->is_downloaded)
+                            Already Downloaded.
+                        @else
+                            <a href="{{ route('coupons.download',$coupon) }}"
+                               class="text-indigo-600 hover:underline font-bold"
+                               download>Download Coupon PDF</a>
+                        @endif
                     </div>
                 </div>
             @endforeach

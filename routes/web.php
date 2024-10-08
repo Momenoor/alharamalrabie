@@ -12,3 +12,5 @@ Route::post('/generate', [CouponController::class, 'generateCoupons'])->name('co
 Route::get('/all', [CouponController::class, 'index'])->name('coupons.all');
 Route::get('/{coupon}', [CouponController::class, 'show'])->name('coupons.show');
 Route::get('redeem/{coupon}', [CouponController::class, 'redeem'])->name('coupons.redeem');
+Route::post('redeem/{coupon}', [CouponController::class, 'confirmRedeem'])->name('coupons.confirmRedeem');
+Route::get('download/{coupon}', [CouponController::class, 'download'])->name('coupons.download');

@@ -14,25 +14,37 @@
         <!-- Coupon Generation Form -->
         <form action="{{ route('coupons.generate') }}" method="POST">
             @csrf
+            <img style="display: block; margin: 0 auto;" class="" src="{{ asset('logo.png') }}"
+                 alt="Company Logo" width="100px">
             <div class="mb-4">
                 <label for="discount" class="block text-sm font-medium text-gray-700">Discount Percentage</label>
-                <input type="number" name="discount" id="discount" min="1" max="100" required
+                <input type="number" name="discount" id="discount" min="1" max="100" required value="{{old('discount')}}"
                        class="mt-1 p-2 border border-gray-300 rounded-md w-full focus:ring-indigo-500 focus:border-indigo-500">
+                @if ($errors->has('discount'))
+                    <span class="text-red-500 text-sm">{{ $errors->first('discount') }}</span>
+                @endif
             </div>
 
             <div class="mb-4">
                 <label for="count" class="block text-sm font-medium text-gray-700">Number of Coupons</label>
-                <input type="number" name="count" id="count" min="1" required
+                <input type="number" name="count" id="count" min="1" required value="{{old('count')}}"
                        class="mt-1 p-2 border border-gray-300 rounded-md w-full focus:ring-indigo-500 focus:border-indigo-500">
+                @if ($errors->has('count'))
+                    <span class="text-red-500 text-sm">{{ $errors->first('count') }}</span>
+                @endif
             </div>
 
             <div class="mb-6">
                 <label for="expiry_date" class="block text-sm font-medium text-gray-700">Expiry Date</label>
-                <input type="date" name="expiry_date" id="expiry_date" required
+                <input type="date" name="expiry_date" id="expiry_date" required value="{{old('expiry_date')}}"
                        class="mt-1 p-2 border border-gray-300 rounded-md w-full focus:ring-indigo-500 focus:border-indigo-500">
+                @if ($errors->has('expiry_date'))
+                    <span class="text-red-500 text-sm">{{ $errors->first('expiry_date') }}</span>
+                @endif
             </div>
 
-            <button type="submit" class="w-full bg-indigo-600 text-white font-bold py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            <button type="submit"
+                    class="w-full bg-indigo-600 text-white font-bold py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">
                 Generate Coupons
             </button>
         </form>
