@@ -18,6 +18,7 @@ class CheckPasscode
         // Check if the passcode has been set in the session
         if (!$request->session()->has('passcode_verified')) {
             // Redirect to the passcode form if it's not set
+            $request->session()->put('url.intended', $request->url());
             return redirect()->route('passcode.form');
         }
 

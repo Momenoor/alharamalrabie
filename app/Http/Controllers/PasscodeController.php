@@ -26,7 +26,7 @@ class PasscodeController extends Controller
             // Store passcode verification in the session
             $request->session()->put('passcode_verified', true);
 
-            return redirect()->intended(); // Redirect to the intended route after login
+            return redirect()->intended('/all'); // Redirect to the intended route after login
         }
 
         // If the passcode is incorrect, return back with an error
