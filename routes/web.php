@@ -7,7 +7,10 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
-
+Route::get('/end-session', function () {
+    request()->session()->invalidate();
+    request()->session()->regenerateToken();
+});
 Route::get('/passcode', [PasscodeController::class, 'showForm'])->name('passcode.form');
 Route::post('/passcode', [PasscodeController::class, 'verifyPasscode'])->name('passcode.verify');
 Route::middleware('check.passcode')->group(function () {
