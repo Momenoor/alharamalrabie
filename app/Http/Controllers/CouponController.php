@@ -74,6 +74,9 @@ class CouponController extends Controller
         if (Carbon::parse($coupon->expiry_date)->isBefore(now())) {
             return view('coupon.expiredCoupon', compact('coupon'));
         }
+        if ($coupon->is_redeemed) {
+            return view('coupon.redeemedCoupon', compact('coupon'));
+        }
         return view('coupon.redeemCoupon', compact('coupon'));
     }
 
