@@ -15,7 +15,19 @@ class CouponController extends Controller
     public function index()
     {
         $coupons = Coupon::all();
-        return view('coupon.generatedCouponPDF', compact('coupons'));
+        $isAll = true;
+        return view('coupon.generatedCouponPDF', compact('coupons', 'isAll'));
+    }
+
+    public function list(Request $request)
+    {
+
+        $coupons = Coupon::query();
+        if ($request->has('search')) {
+            $coupons->where('code', $request->get('search'));
+        }
+        $coupons = $coupons->get();
+        return view('coupon.generatedCouponPDFList', compact('coupons'));
     }
 
     //
@@ -65,7 +77,7 @@ class CouponController extends Controller
         }
 
         // Return the view with the generated coupons and their download links
-        return view('coupon.generatedCouponPDF', ['coupons' => $coupons]);
+        return view('coupon.generatedCouponPDF', ['coupons' => $coupons,'isAll' => false]);
     }
 
     public function redeem($code): \Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application
@@ -112,5 +124,25 @@ class CouponController extends Controller
     public function show(Coupon $coupon): \Illuminate\Contracts\View\View
     {
         return view('coupon.show', compact('coupon'));
+    }
+
+    public function delete(Coupon $coupon): \Illuminate\Http\RedirectResponse
+    {
+        $filePath = 'coupons/' . $coupon->code . '.pdf';
+        if (Storage::disk('public')->delete($filePath)) {
+            $coupon->delete();
+        }
+        return redirect()->route('coupons.list');
+    }
+
+    public function deleteAll(): \Illuminate\Http\RedirectResponse
+    {
+
+        if (Storage::disk('public')->deleteDirectory('coupons')) {
+
+            // Delete all coupon records from the database
+            Coupon::query()->truncate(); // Removes all records from the 'coupons' table
+        }
+        return redirect()->route('coupons.list');
     }
 }
